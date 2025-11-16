@@ -139,7 +139,7 @@
     <ClInclude Include="user_menu.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="booklist.txt" />
+    <Text Include="2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
