@@ -138,6 +138,9 @@
     <ClInclude Include="register.h" />
     <ClInclude Include="user_menu.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="booklist.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
