@@ -55,6 +55,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="2.txt" />
+    <Text Include="booklist.txt" />
   </ItemGroup>
 </Project>
