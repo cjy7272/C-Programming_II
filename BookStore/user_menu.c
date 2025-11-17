@@ -227,9 +227,9 @@ void delete_account(char id[])
     {
         system("cls");
         gotoxy(x, y);     printf("忙式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式忖");
-        gotoxy(x, y + 1); printf("弛                     薑蜓 驍黴ж衛啊蝗棲梱?                         弛");
+        gotoxy(x, y + 1); printf("弛                      薑蜓 驍黴ж衛啊蝗棲梱?                         弛");
         gotoxy(x, y + 2); printf("戍式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式扣");
-        gotoxy(x, y + 3); printf("弛                 [  Yes  ]                       [  No  ]           弛");
+        gotoxy(x, y + 3); printf("弛              [  Yes (Y) ]                    [  No (N) ]            弛");
         gotoxy(x, y + 4); printf("戌式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式式戎");
 
         key = _getch();
@@ -243,7 +243,7 @@ void delete_account(char id[])
         }
         else if (key == 'n' || key == 'N' || key == 27)
         {
-            return;
+            settings(id);
         }
     }
 }
