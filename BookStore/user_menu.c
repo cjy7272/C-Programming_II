@@ -303,7 +303,7 @@ int settings(char id[])
             if (cursor == 0) dummy_charge();
             else if (cursor == 1) { show_menu(); return 0; }
             else if (cursor == 2) { delete_account(id); show_menu(); return 0; }
-            else if (cursor == 3) return 0;
+            else if (cursor == 3) user_menu(id);
         }
         else if (key == 27) return 0;
     }
