@@ -34,7 +34,7 @@ void user_menu(char id[])
     load_books();
 
     int page = 0;
-    char search[100] = "";
+    char search[100] = {0};
     int filtered_index[MAX_BOOKS];
     int filtered_count = book_count;
 
@@ -45,12 +45,12 @@ void user_menu(char id[])
         system("cls");
         int x = 2, y = 2;
 
-       
+
         gotoxy(x, y);
         printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
 
         gotoxy(x, y + 1);
-        printf("¦¢ µµ¼­°Ë»ö : %-40s                           (Enter·Î °Ë»ö) ¦¢", search);
+        printf("¦¢ µµ¼­°Ë»ö : %-67s(Enter·Î °Ë»ö) ¦¢", search);
 
         gotoxy(x, y + 2);
         printf("¦¢                 (ÄÚµå, µµ¼­¸í, ÀÛ°¡¸í, ÃâÆÇ»ç¸í)                                             ¦¢");
@@ -101,6 +101,7 @@ void user_menu(char id[])
         printf("¡Ø %s´ÔÀÌ ·Î±×ÀÎ ÁßÀÔ´Ï´Ù ¡Ø", id);
 
         gotoxy(16, 3);
+        fflush(stdout);
         int ch = _getch();
 
         if (ch == 0 || ch == 224)
@@ -109,9 +110,10 @@ void user_menu(char id[])
             if (ch == 75 && page > 0) page--;
             if (ch == 77 && page * 5 + 5 < filtered_count) page++;
         }
-        else if (ch == 8 && strlen(search))
+        else if (ch == 8)
         {
-            search[strlen(search) - 1] = 0;
+            size_t len = strlen(search);
+            if (len > 0) search[len - 1] = '\0';
         }
         else if (ch == 27 || ch == 'q' || ch == 'Q') break;
         else if (ch == 'a' || ch == 'A') { my_library(id); continue; }
@@ -123,7 +125,7 @@ void user_menu(char id[])
         }
         else if (ch == 13)
         {
-        
+
         }
         else if (strlen(search) < 90)
         {
@@ -256,8 +258,8 @@ int settings(char id[])
     int key;
     int x = 2, y = 1;
 
-    char* menu[4] = { "ÀÜ¾×ÃæÀü", "·Î±×¾Æ¿ô", "È¸¿øÅ»Åð", "µÚ·Î" };
-    int menu_count = 4;
+    char* menu[3] = { "ÀÜ¾×ÃæÀü", "·Î±×¾Æ¿ô", "È¸¿øÅ»Åð"};
+    int menu_count = 3;
 
     while (1)
     {
@@ -281,6 +283,8 @@ int settings(char id[])
             else
                 printf("¦¢                          %-12s                        ¦¢", menu[i]);
         }
+        gotoxy(x, y + 7);
+        printf("¦¢                                                              ¦¢");
         gotoxy(x, y + 8);
         printf("¦¢                                                              ¦¢");
         gotoxy(x, y + 9);
@@ -303,8 +307,7 @@ int settings(char id[])
             if (cursor == 0) dummy_charge();
             else if (cursor == 1) { show_menu(); return 0; }
             else if (cursor == 2) { delete_account(id); show_menu(); return 0; }
-            else if (cursor == 3) user_menu(id);
         }
-        else if (key == 27) return 0;
+        else if (key == 27) user_menu(id);
     }
 }
