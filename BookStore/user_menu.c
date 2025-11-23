@@ -8,25 +8,8 @@
 #include "main.h"
 #include "user_menu.h"
 
-#define MAX_BOOKS 100
-#define BOOKS_PER_PAGE 5
-
-typedef struct
-{
-    char code[10];
-    char title[100];
-    char author[100];
-    char publisher[100];
-    int price;
-    int count;
-} Book;
-
-Book books[MAX_BOOKS];
 int book_count = 0;
-
-void load_books();
-void my_library(char id[]);
-int settings(char id[]);
+int money = 0;
 
 void user_menu(char id[])
 {
@@ -95,10 +78,13 @@ void user_menu(char id[])
         printf("¦¢ [³» ¼­Àç]                                                                             [¼³Á¤] ¦¢");
 
         gotoxy(x, y + 15);
-        printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+        printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
 
-        gotoxy(6, 18);
-        printf("¡Ø %s´ÔÀÌ ·Î±×ÀÎ ÁßÀÔ´Ï´Ù ¡Ø", id);
+        gotoxy(x, y + 16);
+        printf("¦¢ [ %s´ÔÀÌ ·Î±×ÀÎ ÁßÀÔ´Ï´Ù ]                                       [º¸À¯ ÀÜ¾× : %10d ¿ø] ¦¢", id, money);
+
+        gotoxy(x, y + 17);
+        printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
 
         gotoxy(16, 3);
         fflush(stdout);
@@ -205,109 +191,11 @@ void load_books()
     fclose(fp);
 }
 
+
 void my_library(char id[])
 {
     system("cls");
     printf("[%s´ÔÀÇ ¼­Àç]\n", id);
     printf("¼­Àç ±â´É\n");
     system("pause");
-}
-
-void dummy_charge()
-{
-    system("cls");
-    printf("ÀÜ¾×ÃæÀü ±â´É\n");
-    system("pause");
-}
-
-void delete_account(char id[])
-{
-    int x = 2, y = 2;
-    int key;
-
-    while (1)
-    {
-        system("cls");
-        gotoxy(x, y);     printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-        gotoxy(x, y + 1); printf("¦¢                      Á¤¸» Å»ÅðÇÏ½Ã°Ú½À´Ï±î?                         ¦¢");
-        gotoxy(x, y + 2); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-        gotoxy(x, y + 3); printf("¦¢              [  Yes (Y) ]                    [  No (N) ]            ¦¢");
-        gotoxy(x, y + 4); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
-
-        key = _getch();
-
-        if (key == 'y' || key == 'Y')
-        {
-            system("cls");
-            printf("È¸¿ø Å»Åð°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n");
-            system("pause");
-            return;
-        }
-        else if (key == 'n' || key == 'N' || key == 27)
-        {
-            settings(id);
-        }
-    }
-}
-
-extern void show_menu();
-
-int settings(char id[])
-{
-    int cursor = 0;
-    int key;
-    int x = 2, y = 1;
-
-    char* menu[3] = { "ÀÜ¾×ÃæÀü", "·Î±×¾Æ¿ô", "È¸¿øÅ»Åð"};
-    int menu_count = 3;
-
-    while (1)
-    {
-        system("cls");
-
-        gotoxy(x, y);
-        printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-        gotoxy(x, y + 1);
-        printf("¦¢                             ¼³Á¤                             ¦¢");
-        gotoxy(x, y + 2);
-        printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-        gotoxy(x, y + 3);
-        printf("¦¢                                                              ¦¢");
-
-        for (int i = 0; i < menu_count; i++)
-        {
-            gotoxy(x, y + 4 + i);
-
-            if (cursor == i)
-                printf("¦¢                       ¢º  %-12s  ¢¸                     ¦¢", menu[i]);
-            else
-                printf("¦¢                          %-12s                        ¦¢", menu[i]);
-        }
-        gotoxy(x, y + 7);
-        printf("¦¢                                                              ¦¢");
-        gotoxy(x, y + 8);
-        printf("¦¢                                                              ¦¢");
-        gotoxy(x, y + 9);
-        printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-        gotoxy(x, y + 10);
-        printf("¦¢           ¡è¡é ÀÌµ¿        Enter ¼±ÅÃ       ESC µÚ·Î           ¦¢");
-        gotoxy(x, y + 11);
-        printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
-
-        key = _getch();
-
-        if (key == 224)
-        {
-            key = _getch();
-            if (key == 72 && cursor > 0) cursor--;
-            else if (key == 80 && cursor < menu_count - 1) cursor++;
-        }
-        else if (key == 13)
-        {
-            if (cursor == 0) dummy_charge();
-            else if (cursor == 1) { show_menu(); return 0; }
-            else if (cursor == 2) { delete_account(id); show_menu(); return 0; }
-        }
-        else if (key == 27) user_menu(id);
-    }
 }

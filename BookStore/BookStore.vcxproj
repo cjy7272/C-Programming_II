@@ -129,6 +129,7 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="fun.c" />
     <ClCompile Include="register.c" />
+    <ClCompile Include="settings.c" />
     <ClCompile Include="user_menu.c" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="login.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="register.h" />
+    <ClInclude Include="settings.h" />
     <ClInclude Include="user_menu.h" />
   </ItemGroup>
   <ItemGroup>
