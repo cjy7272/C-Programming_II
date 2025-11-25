@@ -116,7 +116,7 @@ void charge_money()
         gotoxy(x, y + 3); printf("│   충전 금액을 입력하세요 (1만원 단위 / 최소 1만원)       │");
         gotoxy(x, y + 4); printf("│                                                          │");
         gotoxy(x, y + 5); printf("│   입력: ");
-        printf("%d원                                              │", amount);
+        printf("%9d원                                      │", amount);
         gotoxy(x, y + 6); printf("│                                                          │");
         gotoxy(x, y + 7); printf("├──────────────────────────────────────────────────────────┤");
         gotoxy(x, y + 8); printf("│   Enter: 확인    ESC: 취소                               │");
