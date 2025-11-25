@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="admin_menu.c" />
     <ClCompile Include="login.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -133,6 +134,7 @@
     <ClCompile Include="user_menu.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="admin_menu.h" />
     <ClInclude Include="fun.h" />
     <ClInclude Include="login.h" />
     <ClInclude Include="main.h" />

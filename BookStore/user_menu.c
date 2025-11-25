@@ -1,11 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
-
-#include <stdio.h>
-#include <string.h>
-#include <Windows.h>
-#include <conio.h>
-#include "fun.h"
-#include "main.h"
 #include "user_menu.h"
 
 int book_count = 0;
@@ -96,12 +88,11 @@ void user_menu(char id[])
             if (ch == 75 && page > 0) page--;
             if (ch == 77 && page * 5 + 5 < filtered_count) page++;
         }
-        else if (ch == 8)
+        else if (ch == 8 || ch == 27)
         {
             size_t len = strlen(search);
             if (len > 0) search[len - 1] = '\0';
         }
-        else if (ch == 27 || ch == 'q' || ch == 'Q') break;
         else if (ch == 'a' || ch == 'A') { my_library(id); continue; }
         else if (ch == 's' || ch == 'S')
         {

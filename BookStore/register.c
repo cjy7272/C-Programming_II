@@ -1,12 +1,5 @@
-#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <windows.h>
-#include <conio.h>
-#include "fun.h"
-#include "main.h"
+#include "register.h"
 
-#define CLS system("cls")
-#define PAUSE system("pause>nul")
 
 void check_register(char id[], char pw[]);
 int check_already_id(char id[]);
@@ -16,15 +9,13 @@ void register_menu()
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD mode;
-    GetConsoleMode(hInput, &mode);
-    disable_mouse_input();
+
 
     int x = 35, y = 5;
     char id[100] = { 0 }, id_c[100] = { 0 }, pw[100] = { 0 };
     int idx_id = 0, idx_idc = 0, idx_pw = 0; // 단계별 idx
     char c;
-    int step = 0; // 0=ID,1=ID확인,2=PW
+    int step = 0; // 0=ID, 1=ID확인, 2=PW
 
     CLS;
 
@@ -40,18 +31,18 @@ void register_menu()
 
     gotoxy(x + 14, 11);
 
-    enable_mouse_input();
-    INPUT_RECORD rec;
-    DWORD read;
-
     while (1) {
-        // 키보드 처리
+        enable_mouse_input();
+
+        // 1. 키보드 처리
         if (_kbhit()) {
             c = _getch();
+            enable_mouse_input(); // 키 입력 직후 마우스 모드 재활성화
+
             if (c == '\r') {  // Enter
                 if (step == 0) { step = 1; gotoxy(x + 19, 14); }
                 else if (step == 1) { step = 2; gotoxy(x + 16, 17); }
-                else break; // 비밀번호 입력 완료
+                else break;
             }
             else if (c == '\b') {  // Backspace
                 if (step == 0 && idx_id > 0) { idx_id--; printf("\b \b"); }
@@ -65,17 +56,9 @@ void register_menu()
             }
         }
 
-        // 마우스 처리
-        if (PeekConsoleInput(hInput, &rec, 1, &read) && read > 0) {
-            ReadConsoleInput(hInput, &rec, 1, &read);
-            if (rec.EventType == MOUSE_EVENT &&
-                rec.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
-                COORD pos = rec.Event.MouseEvent.dwMousePosition;
-                if ((pos.X >= x + 2 && pos.X <= x + 10) && (pos.Y == 23)) {
-                    show_menu();  // 돌아가기
-                    return;
-                }
-            }
+        if (mouse_click(37, 23, 45, 23)) {
+            show_menu();  // 돌아가기
+            return;
         }
 
         Sleep(1);
@@ -111,7 +94,6 @@ void register_menu()
     check_register(id, pw);
 }
 
-// 아이디 중복 확인
 int check_already_id(char id[])
 {
     char path[MAX_PATH];
@@ -124,6 +106,8 @@ int check_already_id(char id[])
     while (fgets(line, sizeof(line), fp)) {
         char f_id[100];
         if (sscanf(line, "%99s", f_id) == 1) {
+            f_id[99] = '\0';
+
             if (strcmp(f_id, id) == 0) {
                 fclose(fp);
                 return 1; // 이미 존재하는 ID
@@ -131,7 +115,7 @@ int check_already_id(char id[])
         }
     }
     fclose(fp);
-    return 0; // 사용 가능한 ID
+    return 0;
 }
 
 // 회원정보 등록
@@ -144,7 +128,7 @@ void check_register(char id[], char pw[])
     if (!fp) return;
 
     int first_money = 100000;
-    fprintf(fp, "%s %s %d\n", id, pw, first_money); // 줄바꿈 추가
+    fprintf(fp, "%s %s %d\n", id, pw, first_money);
     fclose(fp);
 
     register_success();
@@ -161,8 +145,8 @@ void register_success()
     gotoxy(x + 16, 6); printf("☆  회원가입 ☆");
 
     SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
-	gotoxy(x + 10, 12); printf("회원가입이 완료되었습니다!");
+    gotoxy(x + 10, 12); printf("회원가입이 완료되었습니다!");
     SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     PAUSE;
-	show_menu();
+    show_menu();
 }

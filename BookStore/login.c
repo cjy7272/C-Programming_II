@@ -1,34 +1,19 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <windows.h>
-#include <conio.h>
-#include "fun.h"
-#include "main.h"
-#include "user_menu.h"
-
-#define CLS system("cls")
-#define PAUSE system("pause>nul")
+﻿#include "login.h"
 int check_login(char id[], char pw[]);
-
-
 
 void login_menu()
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
-    DWORD mode;
-    GetConsoleMode(hInput, &mode);
-    disable_mouse_input();
-
     int x = 35, y;
     char id[100], pw[100];
     int step;
     int idx_id, idx_pw;
     char c;
 
-    while (1)  // 로그인 반복 루프
+    while (1)
     {
-        CLS;  // 화면 지우기
+        CLS;
         y = 5;
         step = 0;
         idx_id = idx_pw = 0;
@@ -43,13 +28,14 @@ void login_menu()
         gotoxy(x + 16, 6); printf("☆  로그인 ☆");
         gotoxy(x + 5, 11); printf("아이디 : ");
         gotoxy(x + 5, 14); printf("비밀번호 : ");
-
         gotoxy(x + 14, 11);
 
         // 입력 처리
         while (step < 2)
         {
             enable_mouse_input();
+
+            // 1. 키보드 입력 처리
             if (_kbhit())
             {
                 c = _getch();
@@ -63,28 +49,18 @@ void login_menu()
                     else if (step == 1 && idx_pw < 99) { pw[idx_pw++] = c; putchar('*'); }
                 }
             }
-
-            // 돌아가기 버튼 처리 (마우스)
-            INPUT_RECORD rec; DWORD read;
-            if (PeekConsoleInput(hInput, &rec, 1, &read) && read > 0) {
-                ReadConsoleInput(hInput, &rec, 1, &read);
-                if (rec.EventType == MOUSE_EVENT &&
-                    rec.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
-                    COORD pos = rec.Event.MouseEvent.dwMousePosition;
-                    if (pos.X >= x + 2 && pos.X <= x + 10 && pos.Y == 23) {
-                        show_menu();
-                        return;
-                    }
-                }
+            if (mouse_click(37, 23, 45, 23)) {
+                show_menu();
+                return;
             }
+
             Sleep(1);
         }
 
+        // 로그인 인증 및 결과 처리 로직
         id[idx_id] = '\0';
         pw[idx_pw] = '\0';
-
         int result = check_login(id, pw);
-
         if (result == 0)
         {
             int x = 35, y = 5;
@@ -106,16 +82,22 @@ void login_menu()
             else if (result == 2) printf("비밀번호가 틀렸습니다.");
             SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             PAUSE;
-            // 루프 반복 -> 화면 지우고 다시 로그인 시도
         }
     }
 }
 
 
-
-
 int check_login(char id[], char pw[])
 {
+    //관리자인지 먼저 확인하지
+
+
+
+    if (strcmp(id, "admin") == 0 && strcmp(pw, "admin!") == 0)
+    {
+
+    }
+
     char path[MAX_PATH];
     sprintf(path, "%s\\SW_BOOKSTORE\\userdata.txt", getenv("APPDATA"));
 
@@ -134,15 +116,17 @@ int check_login(char id[], char pw[])
         int money;
 
         if (sscanf(line, "%99s %99s %d", file_id, file_pw, &money) == 3) {
+            file_id[99] = '\0';
+            file_pw[99] = '\0';
             if (strcmp(id, file_id) == 0) {
-                id_found = 1; // ID 존재
+                id_found = 1;
                 if (strcmp(pw, file_pw) == 0) {
                     fclose(fp);
-                    return 0;  // 로그인 성공
+                    return 0;
                 }
                 else {
                     fclose(fp);
-                    return 2;  // 비밀번호 틀림
+                    return 2;
                 }
             }
         }
@@ -150,7 +134,7 @@ int check_login(char id[], char pw[])
 
     fclose(fp);
     if (!id_found)
-        return 1; // ID 없음
+        return 1;
 
-    return 3; // 그 외 (예상치 못한 경우)
+    return 3;
 }

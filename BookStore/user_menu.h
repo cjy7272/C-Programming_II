@@ -1,7 +1,16 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
 #define MAX_BOOKS 100
 #define BOOKS_PER_PAGE 5
+
+#include <stdio.h>
+#include <string.h>
+#include <Windows.h>
+#include <conio.h>
+#include "fun.h"
+#include "main.h"
+
 
 typedef struct
 {
