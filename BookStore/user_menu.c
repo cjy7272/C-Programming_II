@@ -117,7 +117,6 @@ void user_menu(char id[])
             if (filtered_count > 0 && page * BOOKS_PER_PAGE >= filtered_count) page = 0;
         }
 
-        
 
         if (mouse_click(40, 13, 42, 14))
         {
