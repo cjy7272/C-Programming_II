@@ -5,6 +5,9 @@ int money = 0;
 
 void user_menu(char id[])
 {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+
     system("cls");
     load_books();
 
