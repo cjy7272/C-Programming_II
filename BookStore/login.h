@@ -7,7 +7,7 @@
 #include "fun.h"
 #include "main.h"
 #include "user_menu.h"
-
+#include "admin_menu.h"
 #define CLS system("cls")
 #define PAUSE system("pause>nul")
 void login_menu();

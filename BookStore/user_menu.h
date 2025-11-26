@@ -10,6 +10,7 @@
 #include <conio.h>
 #include "fun.h"
 #include "main.h"
+#include "settings.h"
 
 
 typedef struct

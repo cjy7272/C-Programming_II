@@ -5,6 +5,12 @@ int money = 0;
 
 void user_menu(char id[])
 {
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD origMode = 0;
+    GetConsoleMode(hInput, &origMode);
+    // 마우스 입력을 허용(원래 모드 보존)
+    SetConsoleMode(hInput, origMode | ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
     system("cls");
     load_books();
 
@@ -17,32 +23,25 @@ void user_menu(char id[])
 
     while (1)
     {
-        system("cls");
         int x = 2, y = 2;
-
 
         gotoxy(x, y);
         printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
-
         gotoxy(x, y + 1);
         printf("│ 도서검색 : %-67s(Enter로 검색) │", search);
-
         gotoxy(x, y + 2);
         printf("│                 (코드, 도서명, 작가명, 출판사명)                                             │");
-
         gotoxy(x, y + 3);
         printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
-
         gotoxy(x, y + 4);
         printf("│ 코드   제목                        작가                           출판사      가격     수량  │");
-
         gotoxy(x, y + 5);
         printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < BOOKS_PER_PAGE; i++)
         {
-            int idx = page * 5 + i;
-            gotoxy(2, 8 + i);
+            int idx = page * BOOKS_PER_PAGE + i;
+            gotoxy(x, 8 + i);
 
             if (idx < filtered_count)
             {
@@ -77,59 +76,84 @@ void user_menu(char id[])
 
         gotoxy(x, y + 17);
         printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
-
         gotoxy(16, 3);
         fflush(stdout);
-        int ch = _getch();
 
-        if (ch == 0 || ch == 224)
+        // -- 입력 처리(비차단)
+        enable_mouse_input();
+
+        // 1) 키보드 처리
+        if (_kbhit())
         {
-            ch = _getch();
-            if (ch == 75 && page > 0) page--;
-            if (ch == 77 && page * 5 + 5 < filtered_count) page++;
+            int ch = _getch();
+
+            if (ch == 0 || ch == 224) // 방향키
+            {
+                ch = _getch();
+                if (ch == 75 && page > 0) page--;
+                if (ch == 77 && (page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+            }
+            else if (ch == 8 || ch == 27)
+            {
+                size_t len = strlen(search);
+                if (len > 0) search[len - 1] = '\0';
+            }
+            else if (strlen(search) < 90)
+            {
+                strncat(search, (char[]) { ch, 0 }, 1);
+            }
+            filtered_count = 0;
+            for (int i = 0; i < book_count; i++)
+            {
+                if (strstr(books[i].code, search) ||
+                    strstr(books[i].title, search) ||
+                    strstr(books[i].author, search) ||
+                    strstr(books[i].publisher, search))
+                {
+                    filtered_index[filtered_count++] = i;
+                }
+            }
+            if (filtered_count == 0) page = 0;
+            if (filtered_count > 0 && page * BOOKS_PER_PAGE >= filtered_count) page = 0;
         }
-        else if (ch == 8 || ch == 27)
+
+        
+
+        if (mouse_click(40, 13, 42, 14))
         {
-            size_t len = strlen(search);
-            if (len > 0) search[len - 1] = '\0';
+            if (page > 0) page--;
+            continue;
         }
-        else if (ch == 'a' || ch == 'A') { my_library(id); continue; }
-        else if (ch == 's' || ch == 'S')
+        if (mouse_click(40, 13, 42, 14))
+        {
+            if ((page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+            continue;
+        }
+        if (mouse_click(1,1,2,2))
+        {
+            my_library(id);
+        }
+        if (mouse_click(89, 15, 96, 17))
         {
             settings(id);
-
-            return;
-        }
-        else if (ch == 13)
-        {
-
-        }
-        else if (strlen(search) < 90)
-        {
-            strncat(search, (char[]) { ch, 0 }, 1);
         }
 
-        filtered_count = 0;
-        for (int i = 0; i < book_count; i++)
-            if (strstr(books[i].code, search) ||
-                strstr(books[i].title, search) ||
-                strstr(books[i].author, search) ||
-                strstr(books[i].publisher, search))
-            {
-                filtered_index[filtered_count++] = i;
-            }
-
-
-        if (filtered_count > 0 && page * 5 >= filtered_count) page = 0;
+        Sleep(1);
     }
+
+    SetConsoleMode(hInput, origMode);
 }
 
 void load_books()
 {
-    FILE* fp = fopen("booklist.txt", "r");
+    char path[MAX_PATH];
+    
+	sprintf(path, "%s\\SW_BOOKSTORE\\booklist.txt", getenv("APPDATA"));
+
+    FILE* fp = fopen(path, "r");
     if (!fp)
     {
-        printf("booklist.txt 파일을 열 수 없습니다.\n");
+        printf("파일을 열 수 없습니다: %s\n", path);
         system("pause");
         exit(1);
     }

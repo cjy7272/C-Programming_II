@@ -1,4 +1,5 @@
 ﻿#include "login.h"
+
 int check_login(char id[], char pw[]);
 
 void login_menu()
@@ -61,6 +62,7 @@ void login_menu()
         id[idx_id] = '\0';
         pw[idx_pw] = '\0';
         int result = check_login(id, pw);
+
         if (result == 0)
         {
             int x = 35, y = 5;
@@ -72,6 +74,11 @@ void login_menu()
             gotoxy(x + 14, 12); printf("%s님 환영합니다!!", id);
             SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             user_menu(id);
+            return;
+        }
+        else if (result = 1)
+        {
+            admin_menu(id);
             return;
         }
         else
@@ -87,54 +94,49 @@ void login_menu()
 }
 
 
-int check_login(char id[], char pw[])
+int check_login(const char* id, const char* pw)
 {
-    //관리자인지 먼저 확인하지
-
-
-
-    if (strcmp(id, "admin") == 0 && strcmp(pw, "admin!") == 0)
-    {
-
-    }
-
     char path[MAX_PATH];
     sprintf(path, "%s\\SW_BOOKSTORE\\userdata.txt", getenv("APPDATA"));
 
     FILE* fp = fopen(path, "r");
-    if (!fp) {
-        printf("파일을 열 수 없습니다.\n");
-        PAUSE;
-        exit(100);
-    }
+    if (!fp) return 3; // 파일 없음 → ID 없음 취급
 
-    char line[256];
+    char file_id[100], file_pw[100];
+    int is_admin;
     int id_found = 0;
 
+    char line[256];
     while (fgets(line, sizeof(line), fp)) {
-        char file_id[100], file_pw[100];
-        int money;
 
-        if (sscanf(line, "%99s %99s %d", file_id, file_pw, &money) == 3) {
+        if (sscanf(line, "%99s %99s %d", file_id, file_pw, &is_admin) == 3) {     // 1=관리자 0=일반유저 -1=예외
+
             file_id[99] = '\0';
             file_pw[99] = '\0';
+
+            // ID 일치
             if (strcmp(id, file_id) == 0) {
                 id_found = 1;
+
+                // PW 일치 여부 체크
                 if (strcmp(pw, file_pw) == 0) {
+
                     fclose(fp);
-                    return 0;
+
+                    // 관리자인가?
+                    if (is_admin == 1)
+                        return 1;   // 관리자
+                    else
+                        return 0;   // 일반 유저
                 }
                 else {
                     fclose(fp);
-                    return 2;
+                    return -1;   // PW 불일치
                 }
             }
         }
     }
 
     fclose(fp);
-    if (!id_found)
-        return 1;
-
-    return 3;
+    return -1; // ID 없음
 }
