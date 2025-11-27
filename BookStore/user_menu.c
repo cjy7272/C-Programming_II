@@ -6,13 +6,9 @@ int money = 0;
 
 void user_menu(char id[])
 {
-    hide_cursor();
 
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
-
-    GetConsoleMode(hInput, &origMode);
-    SetConsoleMode(hInput, origMode | ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
 
     system("cls");
     load_books();
@@ -26,12 +22,14 @@ void user_menu(char id[])
 
     while (1)
     {
+        hide_cursor();
+
         int x = 2, y = 2;
 
         gotoxy(x, y);
         printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
         gotoxy(x, y + 1);
-        printf("│ 도서검색 : %-67s(Enter로 검색) │", search);
+        printf("│ 도서검색 : 클릭하여 검색%-67s │", search);
         gotoxy(x, y + 2);
         printf("│                 (코드, 도서명, 작가명, 출판사명)                                             │");
         gotoxy(x, y + 3);
@@ -80,39 +78,9 @@ void user_menu(char id[])
         gotoxy(x, y + 17);
         printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
 
-        gotoxy(16, 3);
-
         fflush(stdout);
 
         enable_mouse_input();
-
-        //키보드 처리
-        if (_kbhit())
-        {
-
-            int ch = _getch();
-            if (ch == 8 || ch == 27)
-            {
-                size_t len = strlen(search);
-                if (len > 0) search[len - 1] = '\0';
-            }
-            else if (strlen(search) < 90)
-            {
-                strncat(search, (char[]) { ch, 0 }, 1);
-            }
-
-            filtered_count = 0;
-            for (int i = 0; i < book_count; i++)
-                if (strstr(books[i].code, search) ||
-                    strstr(books[i].title, search) ||
-                    strstr(books[i].author, search) ||
-                    strstr(books[i].publisher, search))
-                {
-                    filtered_index[filtered_count++] = i;
-                }
-            if (filtered_count > 0 && page * 5 >= filtered_count) page = 0;
-
-        }
 
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
@@ -161,11 +129,35 @@ void user_menu(char id[])
                 settings(id);
 				break;
             }
-        }
+            if (mx >= 16 && mx <= 84 && my == 3) // 대략적인 '도서검색 : [ ]' 영역
+            {
+                gotoxy(16, 8);
 
+                printf("%-67s", "");
+
+                if (fgets(search, 99, stdin) != NULL) 
+                {
+                    search[strcspn(search, "\n")] = 0;
+                }
+
+                hide_cursor();
+
+                filtered_count = 0;
+                for (int i = 0; i < book_count; i++)
+                    if (strstr(books[i].code, search) ||
+                        strstr(books[i].title, search) ||
+                        strstr(books[i].author, search) ||
+                        strstr(books[i].publisher, search))
+                    {
+                        filtered_index[filtered_count++] = i;
+                    }
+                if (filtered_count > 0 && page * BOOKS_PER_PAGE >= filtered_count) page = 0;
+
+                continue;
+            }
+        }
         Sleep(1);
     }
-    SetConsoleMode(hInput, origMode);
 }
 
 void load_books()
@@ -233,7 +225,50 @@ void load_books()
 void my_library(char id[])
 {
     system("cls");
-    printf("[%s님의 서재]\n", id);
-    printf("서재 기능\n");
-    system("pause");
+
+    int x = 2, y = 2;
+
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
+    while (1)
+    {
+
+        gotoxy(x, y);
+        printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
+        gotoxy(x, y + 1);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 2);
+        printf("│                                           내 서재                                            │");
+        gotoxy(x, y + 3);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 4);
+        printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
+        gotoxy(x, y + 5);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 6);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 7);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 8);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 9);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 10);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 11);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 12);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 13);
+        printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
+        gotoxy(x, y + 14);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 15);
+        printf("│                                                                                     뒤로가기 │");
+        gotoxy(x, y + 16);
+        printf("│                                                                                              │");
+        gotoxy(x, y + 17);
+        printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
+    }
 }

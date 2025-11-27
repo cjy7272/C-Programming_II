@@ -4,7 +4,6 @@ void show_menu();
 
 int main(void)
 {
-   
     check_file();
     show_menu();
     return 0;
