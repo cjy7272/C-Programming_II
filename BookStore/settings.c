@@ -1,6 +1,5 @@
 #include "settings.h"
 
-
 int settings(char id[])
 {
 
