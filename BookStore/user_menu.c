@@ -7,6 +7,7 @@ int money = 0;
 void user_menu(char id[])
 {
     hide_cursor();
+
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
 
@@ -84,8 +85,6 @@ void user_menu(char id[])
         fflush(stdout);
 
         enable_mouse_input();
-
-        
 
         //키보드 처리
         if (_kbhit())
