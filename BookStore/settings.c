@@ -1,15 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <Windows.h>
-#include <conio.h>
-#include "fun.h"
-#include "main.h"
-#include "user_menu.h"
 #include "settings.h"
 
 
 int settings(char id[])
 {
+
+    system("cls");
     int cursor = 0;
     int key;
     int x = 2, y = 2;
@@ -17,9 +12,11 @@ int settings(char id[])
     char* menu[3] = { "ÀÜ¾×ÃæÀü", "·Î±×¾Æ¿ô", "È¸¿øÅ»Åð" };
     int menu_count = 3;
 
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
     while (1)
     {
-        system("cls");
 
         gotoxy(x, y);
         printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
@@ -48,141 +45,196 @@ int settings(char id[])
         gotoxy(x, y + 12);
         printf("¦¢                                                                                              ¦¢");
         gotoxy(x, y + 13);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 14);
         printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+        gotoxy(x, y + 14);
+        printf("¦¢                                                                                              ¦¢");
         gotoxy(x, y + 15);
-        printf("¦¢                                                                                  µÚ·Î°¡±â ¦¢");
+        printf("¦¢                                                                                     µÚ·Î°¡±â ¦¢"); 
         gotoxy(x, y + 16);
         printf("¦¢                                                                                              ¦¢");
         gotoxy(x, y + 17);
         printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
 
-        key = _getch();
+        enable_mouse_input();
 
-        if (key == 224)
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
         {
-            key = _getch();
-            if (key == 72 && cursor > 0) cursor--;
-            else if (key == 80 && cursor < menu_count - 1) cursor++;
+            if (mx >= 45 && mx <= 54 && my >= 8 && my <= 9)
+            {
+                gotoxy(46, 9);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("ÀÜ¾×ÃæÀü");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                charge_money();
+            }
+            else if (mx >= 46 && mx <= 53 && my >= 10 && my <= 11)
+            {
+                gotoxy(46, 11);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("·Î±×¾Æ¿ô");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                show_menu();
+                return 0;
+            }
+            else if (mx >= 45 && mx <= 53 && my == 13)
+            {
+                gotoxy(46, 13);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("È¸¿øÅ»Åð");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                delete_account(id);
+                show_menu();
+                return 0;
+            }
+            else if (mx >= 87 && mx <= 95 && my >= 16 && my <= 17)
+            {
+                gotoxy(88, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("µÚ·Î°¡±â");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                user_menu(id);
+            }
         }
-        else if (key == 13)
-        {
-            if (cursor == 0) charge_money();
-            else if (cursor == 1) { show_menu(); return 0; }
-            else if (cursor == 2) { delete_account(id); show_menu(); return 0; }
-        }
-        else if (key == 27) user_menu(id);
+        Sleep(1);
     }
 }
 
-
 void delete_account(char id[])
 {
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
     int x = 2, y = 2;
     int key;
 
+    system("cls");
+    gotoxy(x, y);
+    printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
+    gotoxy(x, y + 1);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 2);
+    printf("¦¢                                           È¸¿øÅ»Åð                                           ¦¢");
+    gotoxy(x, y + 3);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 4);
+    printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+    gotoxy(x, y + 5);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 6);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 7);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 8);
+    printf("¦¢                                    Á¤¸» Å»ÅðÇÏ½Ã°Ú½À´Ï±î?                                    ¦¢");
+    gotoxy(x, y + 9);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 10);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 11);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 12);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 13); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+    gotoxy(x, y + 14);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 15); printf("¦¢                         [  Yes  ]                           [  No  ]                         ¦¢");
+    gotoxy(x, y + 16);
+    printf("¦¢                                                                                              ¦¢");
+    gotoxy(x, y + 17); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+
     while (1)
     {
-        system("cls");
-        gotoxy(x, y);
-        printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-        gotoxy(x, y + 1);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 2);
-        printf("¦¢                                           È¸¿øÅ»Åð                                           ¦¢");
-        gotoxy(x, y + 3);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 4);
-        printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-        gotoxy(x, y + 5);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 6);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 7);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 8);
-        printf("¦¢                                    Á¤¸» Å»ÅðÇÏ½Ã°Ú½À´Ï±î?                                    ¦¢");
-        gotoxy(x, y + 9);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 10);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 11);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 12);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 13); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-        gotoxy(x, y + 14);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 15); printf("¦¢                       [  Yes (Y) ]                         [  No (N) ]                       ¦¢");
-        gotoxy(x, y + 16);
-        printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 17); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+        enable_mouse_input();
 
-        key = _getch();
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        if (key == 'y' || key == 'Y')
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
         {
-            system("cls");
-            gotoxy(x, y);
-            printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-            gotoxy(x, y + 1);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 2);
-            printf("¦¢                                           È¸¿øÅ»Åð                                           ¦¢");
-            gotoxy(x, y + 3);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 4);
-            printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-            gotoxy(x, y + 5);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 6);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 7);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 8);
-            printf("¦¢                                   È¸¿ø Å»Åð°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.                                ¦¢");
-            gotoxy(x, y + 9);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 10);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 11);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 12);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 13); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-            gotoxy(x, y + 14);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 15);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 16);
-            printf("¦¢                                                                                              ¦¢");
-            gotoxy(x, y + 17); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+            if (mx >= 27 && mx <= 37 && my >= 16 && my <= 17)
+            {
+                gotoxy(28, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[  Yes  ]");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
-            gotoxy(33, y + 15);
-            system("pause");
-            return;
+                system("cls");
+                gotoxy(x, y);
+                printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
+                gotoxy(x, y + 1);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 2);
+                printf("¦¢                                           È¸¿øÅ»Åð                                           ¦¢");
+                gotoxy(x, y + 3);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 4);
+                printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+                gotoxy(x, y + 5);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 6);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 7);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 8);
+                printf("¦¢                                   È¸¿ø Å»Åð°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.                                ¦¢");
+                gotoxy(x, y + 9);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 10);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 11);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 12);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 13); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+                gotoxy(x, y + 14);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 15);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 16);
+                printf("¦¢                                                                                              ¦¢");
+                gotoxy(x, y + 17); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+
+                gotoxy(33, y + 15);
+                system("pause");
+                return;
+            }
+            else if (mx >= 63 && mx <= 71 && my >= 16 && my <= 17)
+            {
+                gotoxy(64, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[  No  ]");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                settings(id);
+            }
         }
-        else if (key == 'n' || key == 'N' || key == 27)
-        {
-            settings(id);
-        }
+        Sleep(1);
+        
     }
 }
 
 void charge_money()
 {
-
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
     extern int money;
 
     int x = 2, y = 2;
     int amount = 0;
 
+    system("cls");
+
     while (1)
     {
-        system("cls");
 
         gotoxy(x, y);     printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
         gotoxy(x, y + 1);
@@ -206,96 +258,114 @@ void charge_money()
         gotoxy(x, y + 13); printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
         gotoxy(x, y + 14);
         printf("¦¢                                                                                              ¦¢");
-        gotoxy(x, y + 15); printf("¦¢   Enter: È®ÀÎ    ESC: Ãë¼Ò                                                                   ¦¢");
+        gotoxy(x, y + 15); printf("¦¢   Enter: È®ÀÎ                                                                       µÚ·Î°¡±â ¦¢");
         gotoxy(x, y + 16);
         printf("¦¢                                                                                              ¦¢");
         gotoxy(x, y + 17); printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
 
-        int key = _getch();
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-        if (key == 27) return;    // ESC ¡æ Ãë¼Ò
-
-        else if (key == 13)       // Enter
+        if (_kbhit())
         {
-            if (amount >= 10000 && amount % 10000 == 0)
-            {
-                money += amount;
-                system("cls");
-                gotoxy(x, y);     
-                printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
-                gotoxy(x, y + 1);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 2); 
-                printf("¦¢                                        ÀÜ¾× ÃæÀüÇÏ±â                                         ¦¢");
-                gotoxy(x, y + 3);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 4); 
-                printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-                gotoxy(x, y + 5);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 6); 
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 7); 
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 8);
-                printf("¦¢                               ÃæÀü ¿Ï·á! ÇöÀç ÀÜ¾×: %d¿ø                                ¦¢", money);
-                gotoxy(x, y + 9); 
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 10);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 11);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 12); 
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 13); 
-                printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
-                gotoxy(x, y + 14);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 15); 
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 16);
-                printf("¦¢                                                                                              ¦¢");
-                gotoxy(x, y + 17); 
-                printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
-               
-                gotoxy(33, y + 15);
-                system("pause");
-                return;
-            }
-            else
-            {
-                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
-                gotoxy(21, 14);
-                printf("Àß¸øµÈ ±Ý¾×ÀÔ´Ï´Ù. 1¸¸¿ø ´ÜÀ§, ÃÖ¼Ò 1¸¸¿ø ÀÌ»ó ÀÔ·ÂÇÏ¼¼¿ä.");
-                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-                PAUSE;
-				continue;
-            }
-        }
-        else if (key >= '0' && key <= '9')
-        {
-            int len = 0;
-            int temp = amount;
+            int key = _getch();
 
-            if (temp == 0) len = 0;
-            else
+            if (key == 13)
             {
-                while (temp > 0)
+                if (amount >= 10000 && amount % 10000 == 0)
                 {
-                    temp /= 10;
-                    len++;
+                    money += amount;
+                    system("cls");
+                    gotoxy(x, y);
+                    printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
+                    gotoxy(x, y + 1);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 2);
+                    printf("¦¢                                        ÀÜ¾× ÃæÀüÇÏ±â                                         ¦¢");
+                    gotoxy(x, y + 3);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 4);
+                    printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+                    gotoxy(x, y + 5);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 6);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 7);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 8);
+                    printf("¦¢                               ÃæÀü ¿Ï·á! ÇöÀç ÀÜ¾×: %d¿ø                                ¦¢", money);
+                    gotoxy(x, y + 9);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 10);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 11);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 12);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 13);
+                    printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+                    gotoxy(x, y + 14);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 15);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 16);
+                    printf("¦¢                                                                                              ¦¢");
+                    gotoxy(x, y + 17);
+                    printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+
+                    gotoxy(33, y + 15);
+                    system("pause");
+                    return;
+                }
+                else
+                {
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                    gotoxy(21, 14);
+                    printf("Àß¸øµÈ ±Ý¾×ÀÔ´Ï´Ù. 1¸¸¿ø ´ÜÀ§, ÃÖ¼Ò 1¸¸¿ø ÀÌ»ó ÀÔ·ÂÇÏ¼¼¿ä.");
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                    PAUSE;
+                    continue;
                 }
             }
-
-            if (len < 7)
+            else if (key >= '0' && key <= '9')
             {
-                amount = amount * 10 + (key - '0');
+                int len = 0;
+                int temp = amount;
+
+                if (temp == 0) len = 0;
+                else
+                {
+                    while (temp > 0)
+                    {
+                        temp /= 10;
+                        len++;
+                    }
+                }
+
+                if (len < 7)
+                {
+                    amount = amount * 10 + (key - '0');
+                }
+            }
+            // ¹é½ºÆäÀÌ½º
+            else if (key == 8)
+            {
+                amount /= 10;
             }
         }
-        // ¹é½ºÆäÀÌ½º
-        else if (key == 8)
+        enable_mouse_input();
+
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
         {
-            amount /= 10;
+            if (mx >= 87 && mx <= 95 && my >= 16 && my <= 17)
+            {
+                gotoxy(88, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("µÚ·Î°¡±â");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                return;
+            }
         }
     }
 }

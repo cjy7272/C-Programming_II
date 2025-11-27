@@ -9,8 +9,8 @@ void user_menu(char id[])
     hide_cursor();
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
+
     GetConsoleMode(hInput, &origMode);
-    // 마우스 입력을 허용(원래 모드 보존)
     SetConsoleMode(hInput, origMode | ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
 
     system("cls");
@@ -85,10 +85,7 @@ void user_menu(char id[])
 
         enable_mouse_input();
 
-        //while (1)
-        //{
-        //    printclickpos();
-        //}
+        
 
         //키보드 처리
         if (_kbhit())
@@ -169,7 +166,6 @@ void user_menu(char id[])
 
         Sleep(1);
     }
-
     SetConsoleMode(hInput, origMode);
 }
 

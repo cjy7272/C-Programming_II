@@ -90,11 +90,15 @@ int get_mouse_click_pos(SHORT* outX, SHORT* outY)
         ReadConsoleInput(hInput, &rec, 1, &read);
 
         if (rec.EventType == MOUSE_EVENT &&
-            (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED))
+            (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED) &&
+            rec.Event.MouseEvent.dwEventFlags == 0)
         {
             COORD pos = rec.Event.MouseEvent.dwMousePosition;
             if (outX) *outX = pos.X;
             if (outY) *outY = pos.Y;
+
+            FlushConsoleInputBuffer(hInput);
+
             return 1;
         }
     }
@@ -107,6 +111,7 @@ void hide_cursor()
     CONSOLE_CURSOR_INFO info = {1, FALSE};
     SetConsoleCursorInfo(h, &info);
 }
+
 
 void disable_mouse_input()
 {
