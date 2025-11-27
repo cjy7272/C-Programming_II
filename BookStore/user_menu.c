@@ -6,7 +6,6 @@ int money = 0;
 
 void user_menu(char id[])
 {
-
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
 
@@ -17,6 +16,8 @@ void user_menu(char id[])
     char search[100] = {0};
     int filtered_index[MAX_BOOKS];
     int filtered_count = book_count;
+    char search_display[68];
+    snprintf(search_display, 68, "%-67s", search);
 
     for (int i = 0; i < book_count; i++) filtered_index[i] = i;
 
@@ -26,10 +27,20 @@ void user_menu(char id[])
 
         int x = 2, y = 2;
 
+        char search_display[68];
+        snprintf(search_display, 68, "%-67s", search);
+
         gotoxy(x, y);
         printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
         gotoxy(x, y + 1);
-        printf("│ 도서검색 : 클릭하여 검색%-67s │", search);
+        if (strlen(search) == 0)
+        {
+            printf("│ 도서검색 : %-72s  (Enter) │", "클릭하여 검색");
+        }
+        else
+        {
+            printf("│ 도서검색 : %-72s  (Enter) │", search);
+        }
         gotoxy(x, y + 2);
         printf("│                 (코드, 도서명, 작가명, 출판사명)                                             │");
         gotoxy(x, y + 3);
@@ -129,18 +140,19 @@ void user_menu(char id[])
                 settings(id);
 				break;
             }
-            if (mx >= 16 && mx <= 84 && my == 3) // 대략적인 '도서검색 : [ ]' 영역
+            if (mx >= 16 && mx <= 84 && my == 3)
             {
-                gotoxy(16, 8);
+                gotoxy(16, 3);
 
                 printf("%-67s", "");
 
+                gotoxy(16, 3);
+
                 if (fgets(search, 99, stdin) != NULL) 
                 {
+                    gotoxy(16, 3);
                     search[strcspn(search, "\n")] = 0;
                 }
-
-                hide_cursor();
 
                 filtered_count = 0;
                 for (int i = 0; i < book_count; i++)
