@@ -6,7 +6,7 @@ int money = 0;
 
 void user_menu(char id[])
 {
-
+    hide_cursor();
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
     GetConsoleMode(hInput, &origMode);
@@ -85,30 +85,28 @@ void user_menu(char id[])
 
         enable_mouse_input();
 
+        //while (1)
+        //{
+        //    printclickpos();
+        //}
+
         //키보드 처리
         if (_kbhit())
         {
 
             int ch = _getch();
-
-            if (ch == 0 || ch == 224)
+            if (ch == 8 || ch == 27)
             {
-                ch = _getch();
-                if (ch == 75 && page > 0) page--;
-                if (ch == 77 && (page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+                size_t len = strlen(search);
+                if (len > 0) search[len - 1] = '\0';
             }
             else if (strlen(search) < 90)
             {
                 strncat(search, (char[]) { ch, 0 }, 1);
             }
-            else if (ch == 8 || ch == 27)
-            {
-                size_t len = strlen(search);
-                if (len > 0) search[len - 1] = '\0';
-            }
+
             filtered_count = 0;
             for (int i = 0; i < book_count; i++)
-            {
                 if (strstr(books[i].code, search) ||
                     strstr(books[i].title, search) ||
                     strstr(books[i].author, search) ||
@@ -116,27 +114,59 @@ void user_menu(char id[])
                 {
                     filtered_index[filtered_count++] = i;
                 }
-            }
-            if (filtered_count == 0) page = 0;
-            if (filtered_count > 0 && page * BOOKS_PER_PAGE >= filtered_count) page = 0;
+            if (filtered_count > 0 && page * 5 >= filtered_count) page = 0;
+
         }
 
-        if (mouse_click(52, 13, 55, 14))
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
         {
-            if ((page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+            // > 버튼 (다음 페이지)
+            if (mx >= 52 && mx <= 55 && my >= 13 && my <= 14)
+            {
+                if ((page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+                gotoxy(53, 14);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf(">");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            }
+            // < 버튼 (이전 페이지)
+            else if (mx >= 40 && mx <= 42 && my >= 13 && my <= 14)
+            {
+                if (page > 0) page--;
+                gotoxy(41, 14);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("<");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            }
+            // [내 서재]
+            else if (mx >= 3 && mx <= 13 && my >= 15 && my <= 17)
+            {
+                gotoxy(4, 16);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[내 서재]");
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                Sleep(130);
+                my_library(id);
+                break;
+            }
+            // [설정]
+            else if (mx >= 89 && mx <= 96 && my >= 15 && my <= 17)
+            {
+                gotoxy(90, 16);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[설정]");
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                Sleep(130);
+                settings(id);
+				break;
+            }
         }
-        if (mouse_click(40, 13, 42, 14))
-        {
-            if (page > 0) page--;
-        }
-        if (mouse_click(3, 15, 13, 17))
-        {
-            my_library(id);
-        }
-        if (mouse_click(89, 15, 96, 17))
-        {
-            settings(id);
-        }
+
         Sleep(1);
     }
 

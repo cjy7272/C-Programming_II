@@ -36,29 +36,23 @@ int settings(char id[])
         gotoxy(x, y + 6);
         printf("│                                                                                              │");
         gotoxy(x, y + 7);
+        printf("│                                           %-12s                                       │", menu[0]);
+        gotoxy(x, y + 8);
         printf("│                                                                                              │");
-
-        for (int i = 0; i < menu_count; i++)
-        {
-            gotoxy(x, y + 8 + i);
-
-            if (cursor == i)
-                printf("│                                       ▶   %-12s◀                                      │", menu[i]);
-            else
-                printf("│                                           %-12s                                       │", menu[i]);
-        }
-     
+        gotoxy(x, y + 9);
+        printf("│                                           %-12s                                       │", menu[1]);
+        gotoxy(x, y + 10);
+        printf("│                                                                                              │");
         gotoxy(x, y + 11);
-        printf("│                                                                                              │");
+        printf("│                                           %-12s                                       │", menu[2]);
         gotoxy(x, y + 12);
         printf("│                                                                                              │");
-
         gotoxy(x, y + 13);
-        printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
-        gotoxy(x, y + 14);
         printf("│                                                                                              │");
+        gotoxy(x, y + 14);
+        printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
         gotoxy(x, y + 15);
-        printf("│                   ↑↓ 이동                Enter 선택               ESC 뒤로                   │");
+        printf("│                                                                                  뒤로가기 │");
         gotoxy(x, y + 16);
         printf("│                                                                                              │");
         gotoxy(x, y + 17);

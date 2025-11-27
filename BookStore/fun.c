@@ -79,7 +79,34 @@ int mouse_click(SHORT x1, SHORT y1, SHORT x2, SHORT y2) {
     return 0;
 }
 
+int get_mouse_click_pos(SHORT* outX, SHORT* outY)
+{
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    INPUT_RECORD rec;
+    DWORD read;
 
+    if (PeekConsoleInput(hInput, &rec, 1, &read) && read > 0)
+    {
+        ReadConsoleInput(hInput, &rec, 1, &read);
+
+        if (rec.EventType == MOUSE_EVENT &&
+            (rec.Event.MouseEvent.dwButtonState & FROM_LEFT_1ST_BUTTON_PRESSED))
+        {
+            COORD pos = rec.Event.MouseEvent.dwMousePosition;
+            if (outX) *outX = pos.X;
+            if (outY) *outY = pos.Y;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void hide_cursor()
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO info = {1, FALSE};
+    SetConsoleCursorInfo(h, &info);
+}
 
 void disable_mouse_input()
 {
