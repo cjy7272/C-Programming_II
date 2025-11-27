@@ -3,8 +3,10 @@
 int book_count = 0;
 int money = 0;
 
+
 void user_menu(char id[])
 {
+
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     DWORD origMode = 0;
     GetConsoleMode(hInput, &origMode);
@@ -76,31 +78,33 @@ void user_menu(char id[])
 
         gotoxy(x, y + 17);
         printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
+
         gotoxy(16, 3);
+
         fflush(stdout);
 
-        // -- 입력 처리(비차단)
         enable_mouse_input();
 
-        // 1) 키보드 처리
+        //키보드 처리
         if (_kbhit())
         {
+
             int ch = _getch();
 
-            if (ch == 0 || ch == 224) // 방향키
+            if (ch == 0 || ch == 224)
             {
                 ch = _getch();
                 if (ch == 75 && page > 0) page--;
                 if (ch == 77 && (page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
             }
+            else if (strlen(search) < 90)
+            {
+                strncat(search, (char[]) { ch, 0 }, 1);
+            }
             else if (ch == 8 || ch == 27)
             {
                 size_t len = strlen(search);
                 if (len > 0) search[len - 1] = '\0';
-            }
-            else if (strlen(search) < 90)
-            {
-                strncat(search, (char[]) { ch, 0 }, 1);
             }
             filtered_count = 0;
             for (int i = 0; i < book_count; i++)
@@ -117,18 +121,15 @@ void user_menu(char id[])
             if (filtered_count > 0 && page * BOOKS_PER_PAGE >= filtered_count) page = 0;
         }
 
-
+        if (mouse_click(52, 13, 55, 14))
+        {
+            if ((page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
+        }
         if (mouse_click(40, 13, 42, 14))
         {
             if (page > 0) page--;
-            continue;
         }
-        if (mouse_click(40, 13, 42, 14))
-        {
-            if ((page + 1) * BOOKS_PER_PAGE < filtered_count) page++;
-            continue;
-        }
-        if (mouse_click(1,1,2,2))
+        if (mouse_click(3, 15, 13, 17))
         {
             my_library(id);
         }
@@ -136,7 +137,6 @@ void user_menu(char id[])
         {
             settings(id);
         }
-
         Sleep(1);
     }
 
@@ -204,7 +204,6 @@ void load_books()
 
     fclose(fp);
 }
-
 
 void my_library(char id[])
 {
