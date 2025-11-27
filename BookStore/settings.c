@@ -292,7 +292,7 @@ void charge_money()
                     gotoxy(x, y + 7);
                     printf("│                                                                                              │");
                     gotoxy(x, y + 8);
-                    printf("│                               충전 완료! 현재 잔액: %d원                                │", money);
+                    printf("│                               충전 완료! 현재 잔액: %7d원                                │", money);
                     gotoxy(x, y + 9);
                     printf("│                                                                                              │");
                     gotoxy(x, y + 10);
