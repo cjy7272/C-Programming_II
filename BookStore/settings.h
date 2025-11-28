@@ -9,4 +9,4 @@
 
 int settings(char id[]);
 void delete_account(char id[]);
-void charge_money();
+void charge_money(char id[]);

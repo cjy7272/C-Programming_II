@@ -3,6 +3,8 @@
 int book_count = 0;
 int money = 0;
 
+void purchase_book_screen(int real_index);
+
 
 void user_menu(char id[])
 {
@@ -60,6 +62,7 @@ void user_menu(char id[])
                 Book b = books[filtered_index[idx]];
                 printf("│ %-6s %-27s %-30s %-10s  %-7d%4d개  │",
                     b.code, b.title, b.author, b.publisher, b.price, b.count);
+
             }
             else
             {
@@ -167,9 +170,147 @@ void user_menu(char id[])
 
                 continue;
             }
+            int clicked_book = -1;
+            
+            if (mx >= 3 && mx <= 95 && my >= 7 && my <= 8)
+                clicked_book = 0;
+
+            else if (mx >= 3 && mx <= 95 && my >= 8 && my <= 9)
+                clicked_book = 1;
+
+            else if (mx >= 3 && mx <= 95 && my >= 9 && my <= 10)
+                clicked_book = 2;
+
+            else if (mx >= 3 && mx <= 95 && my >= 10 && my <= 11)
+                clicked_book = 3;
+
+            else if (mx >= 3 && mx <= 95 && my >= 11 && my <= 12)
+                clicked_book = 4;
+
+            if (clicked_book != -1)
+            {
+                int idx = page * BOOKS_PER_PAGE + clicked_book;
+                if (idx < filtered_count)
+                {
+                    int real_index = filtered_index[idx];
+                    purchase_book_screen(real_index);
+                    continue;
+                }
+            }
+
         }
         Sleep(1);
     }
+}
+void purchase_book_screen(int real_index)
+{
+    HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
+
+    Book* b = &books[real_index];
+    int x = 2, y = 2;
+
+    system("cls");
+    gotoxy(x, y);
+    printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
+    gotoxy(x, y + 1);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 2);
+    printf("│                                     선택한 책 : %-40s     │", b->title);
+    gotoxy(x, y + 3);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 4);
+    printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
+    gotoxy(x, y + 5);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 6);
+    printf("│                                      가격 :%6d원                                          │", b->price);
+    gotoxy(x, y + 7);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 8);
+    printf("│                                      현재 잔액 :%10d원                                 │", money);
+    gotoxy(x, y + 9);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 10);
+    printf("│                                      구매하시겠습니까?                                       │");
+    gotoxy(x, y + 11);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 12);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 13); printf("├──────────────────────────────────────────────────────────────────────────────────────────────┤");
+    gotoxy(x, y + 14);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 15); printf("│                         [  Yes  ]                           [  No  ]                         │");
+    gotoxy(x, y + 16);
+    printf("│                                                                                              │");
+    gotoxy(x, y + 17); printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
+
+    while (1)
+    {
+        enable_mouse_input();
+
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
+        {
+            // > 버튼 (다음 페이지)
+            if (mx >= 63 && mx <= 71 && my >= 16 && my <= 17)
+            {
+                gotoxy(64, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[  No  ]");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                
+                return;
+            }
+            else if (mx >= 27 && mx <= 37 && my >= 16 && my <= 17)
+            {
+                gotoxy(28, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("[  Yes  ]");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+
+                if (money < b->price)
+                {
+                    gotoxy(42, 14);
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                    printf("잔액이 부족합니다.");
+                    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+					//1.5초 후 이전화면으로
+                    Sleep(1500);
+
+                    return;
+                }
+                // 구매 처리
+                money -= b->price;
+
+                //add_to_my_library(*b);  // 내 서재 저장
+                gotoxy(35, 14);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("구매 완료! 내 서재에 추가되었습니다.");
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                //1.5초 후 이전화면으로
+                Sleep(1500);
+
+				return;
+            }
+        }
+    }
+    Sleep(1);
+}
+void add_to_my_library(Book b)
+{
+    
+    FILE* fp = fopen("id.txt", "a");
+    if (!fp) return;
+
+    fprintf(fp, "%s|%s|%s|%s|%d\n",
+        b.code, b.title, b.author, b.publisher, b.price);
+
+    fclose(fp);
 }
 
 void load_books()

@@ -68,7 +68,7 @@ int settings(char id[])
                 printf("잔액충전");
                 Sleep(130);
                 SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-                charge_money();
+                charge_money(id);
             }
             else if (mx >= 46 && mx <= 53 && my >= 10 && my <= 11)
             {
@@ -220,7 +220,7 @@ void delete_account(char id[])
     }
 }
 
-void charge_money()
+void charge_money(char id[])
 {
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
     SetConsoleMode(hInput, ENABLE_EXTENDED_FLAGS | ENABLE_MOUSE_INPUT);
@@ -313,7 +313,7 @@ void charge_money()
 
                     gotoxy(33, y + 15);
                     system("pause");
-                    return;
+					user_menu(id);
                 }
                 else
                 {
@@ -345,7 +345,6 @@ void charge_money()
                     amount = amount * 10 + (key - '0');
                 }
             }
-            // 백스페이스
             else if (key == 8)
             {
                 amount /= 10;
