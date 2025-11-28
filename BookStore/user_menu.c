@@ -386,7 +386,6 @@ void my_library(char id[])
 
     while (1)
     {
-
         gotoxy(x, y);
         printf("┌──────────────────────────────────────────────────────────────────────────────────────────────┐");
         gotoxy(x, y + 1);
@@ -423,5 +422,24 @@ void my_library(char id[])
         printf("│                                                                                              │");
         gotoxy(x, y + 17);
         printf("└──────────────────────────────────────────────────────────────────────────────────────────────┘");
+
+		enable_mouse_input();
+
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        SHORT mx, my;
+        if (get_mouse_click_pos(&mx, &my))
+        {
+            if (mx >= 87 && mx <= 95 && my >= 16 && my <= 17)
+            {
+                gotoxy(88, 17);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("뒤로가기");
+                Sleep(130);
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+                user_menu(id);
+            }
+        }
+        Sleep(1);
     }
 }
