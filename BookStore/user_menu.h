@@ -28,3 +28,5 @@ Book books[MAX_BOOKS];
 void user_menu(char id[]);
 void load_books();
 void my_library(char id[]);
+void purchase_book_screen(int real_index);
+void add_to_my_library(Book b);

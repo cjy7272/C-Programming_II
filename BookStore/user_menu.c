@@ -3,9 +3,6 @@
 int book_count = 0;
 int money = 0;
 
-void purchase_book_screen(int real_index);
-
-
 void user_menu(char id[])
 {
     HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
